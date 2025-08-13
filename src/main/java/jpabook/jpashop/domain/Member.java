@@ -23,6 +23,6 @@ public class Member {
     @Embedded
     private Address address;// 내장 타입 포함됨
 
-    @OneToMany 
+    @OneToMany(mappedBy = "member") //order 테이블에 있는 member필드에 의해 매핑된 것! 매핑된 거울일뿐. 값을 넣는다고 foreign key 값(member_id) 변경되지 않음
     private List<Order> orders = new ArrayList<>(); //일대다 관계 -  하나의 회원이 여러개 상품 주문 order과 반대 개념
 }
