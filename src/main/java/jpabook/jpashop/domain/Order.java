@@ -57,9 +57,63 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status; //주문 상태 [ORDER, CANCEL]
 
-    //==연관관계 편의 메서드==// 양쪽 세팅할 때 한쪽만 ...!
-//    public void setMember(Member member) {
-//        this.member = member; // 반대로 양방향 넣어야함.
+    //==연관관계 편의 메서드==// 양쪽 세팅할 때 한쪽만 ...! 확실하게 컨트롤하는 쪽에 넣기
+    public void setMember(Member member) {   //member 세팅할 때
+        this.member = member; // 반대로 양방향 넣어야함.
+        member.getOrders().add(this);//+
+    }
+//    public static void main(String[] args) {
+//        Member member = new Member();
+//        Order order = new Order();
+
+//        member.getOrders().add(order); 코드 줄어듦
+//        order.setMember(member);
 //    }
-//    public static void main(String[] args)
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+    }
+    public void setDelivery(Delivery delivery) {
+        this.delivery = delivery;
+        delivery.setOrder(this);
+    }
+
+    //==생성 메서드==// 핵심 비즈니스 로직 개발
+    public static Order createOrder(Member member, Delivery delivery, OrderItem...orderItem) {
+        Order order = new Order();
+        order.setMember(member); //파라미터로 member 세팅
+        order.setDelivery(delivery); //delivery 세팅
+        for (OrderItem item : orderItem) {
+            order.addOrderItem(item);
+        }
+        order.setStatus(OrderStatus.ORDER);
+        order.setOrderDate(LocalDateTime.now());
+        return order;
+    }
+    
+    //==비즈니스 로직==//
+    /**
+     * 주문 취소
+     */
+    public void cancel() {
+        if (delivery.getStatus() == DeliveryStatus.COMP) {  //배송이 끝나서 취소가 불가능한 경우
+            throw new IllegalStateException("이미 배송 완료된 상품은 취소가 불가능합니다.");
+        }
+        this.setStatus(OrderStatus.CANCEL); //validation 통과하면 그 외의 경우 나자신(OrderStatus)를 CANCEL 상태로 바꿈
+        for (OrderItem orderItem : orderItems) {
+            orderItem.cancel(); //OrderItem도 주문 취소
+        }
+    }
+
+    //==조회 로직==//
+
+    /**
+     *전체 주문 가격 조회
+     */
+    public int getTotalPrice() {
+        int totalPrice = 0; //totalPrice 0으로 초기화
+        for (OrderItem orderItem : orderItems) {
+            totalPrice +=orderItem.getTotalPrice(); //orderItems에 대한 루프돌면서 orderItem에 대한 TotalPrice 가져옴
+        }
+        return totalPrice;
+    }
 }
