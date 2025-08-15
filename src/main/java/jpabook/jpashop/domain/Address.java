@@ -1,6 +1,7 @@
 package jpabook.jpashop.domain;
 
 import jakarta.persistence.Embeddable;
+import jakarta.validation.Valid;
 import lombok.Getter;
 
 @Embeddable //embedded랑 embeddable 두가지 씀
@@ -13,4 +14,10 @@ public class Address {
     private String city;
     private String street;
     private String zipcode;
+
+    public Address(String city, String street, String zipcode) {
+        this.city = city;
+        this.street = street;
+        this.zipcode = zipcode;
+    }
 }

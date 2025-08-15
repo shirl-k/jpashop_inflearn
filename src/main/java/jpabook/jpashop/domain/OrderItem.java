@@ -10,6 +10,7 @@ import lombok.Setter;
 import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
+@Table(name = "order_item")
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItem { //주문서
