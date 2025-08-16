@@ -11,6 +11,7 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class ItemRepository {
+
     private final EntityManager em;
 
     public void save(Item item) {

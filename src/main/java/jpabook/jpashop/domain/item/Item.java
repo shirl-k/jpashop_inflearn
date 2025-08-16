@@ -33,16 +33,16 @@ public abstract class Item {//구현체 쓸 거기 때문에 Item은 추상클�
      * stock 증가
      */
 
-    public void addStock(int quantity) {
-        this.stockQuantity += quantity; //재고 수량 증가 로직
+    public void addStock(int orderQuantity) {
+        this.stockQuantity += orderQuantity; //재고 수량 증가 로직
     }
 
     /**
      * stock 감소
      */
 
-    public void removeStock(int quantity) {
-        int restStock = this.stockQuantity - quantity;
+    public void removeStock(int orderQuantity) {
+        int restStock = this.stockQuantity - orderQuantity;
         if (restStock < 0) { //재고 수량 <0
             throw new NotEnoughStockException("need more stock");
         }
